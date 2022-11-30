@@ -1,0 +1,131 @@
+@page "/register"
+@using SEP6_Frontend.Models
+@using SEP6_Frontend.Authentication
+@using Microsoft.AspNetCore.Components
+@using System.Text.Json
+
+@inject AuthenticationStateProvider _authenticationStateProvider
+@inject NavigationManager _navigationManager
+
+<div style="height: 100vh; width: 100vw; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; align-content: stretch;">
+    <div class="row">
+        <RadzenTemplateForm TItem="User" Data=@model Submit=@PerformRegister InvalidSubmit=@OnInvalidSubmit>
+            <RadzenFieldset Text="Register">
+                <div class="row mb-5" style="padding-top: 2px">
+                    <div class="col-md-4">
+                        <RadzenLabel Text="Email"/>
+                    </div>
+                    <div class="col">
+                        <RadzenTextBox style="display: block" Name="Email" @bind-Value=@model.email Class="w-100"></RadzenTextBox>
+                        <RadzenRequiredValidator Component="Email" Text="Email is required" Popup=@popup Style="position: absolute"/>
+                        <RadzenEmailValidator Component="Email" Text="Provide a valid email address" Popup=@popup Style="position: absolute"/>
+                    </div>
+                </div>
+                <div class="row mb-5" style="padding-top: 2px">
+                    <div class="col-md-4">
+                        <RadzenLabel Text="Username"/>
+                    </div>
+                    <div class="col">
+                        <RadzenTextBox style="display: block" Name="Username" @bind-Value=@model.username Class="w-100"></RadzenTextBox>
+                        <RadzenRequiredValidator Component="Username" Text="Username is required" Popup=@popup Style="position: absolute"/>
+                    </div>
+                </div>
+                <div class="row mb-5" style="padding-top: 2px">
+                    <div class="col-md-4">
+                        <RadzenLabel Text="Password"/>
+                    </div>
+                    <div class="col">
+                        <RadzenPassword style="display: block" Name="Password" @bind-Value=@model.password Class="w-100"></RadzenPassword>
+                        <RadzenRequiredValidator Component="Password" Text="Password is required" Popup=@popup Style="position: absolute"/>
+                    </div>
+                </div>
+                <div>
+                    <RadzenButton ButtonType="ButtonType.Submit" Text="Submit"></RadzenButton>
+                    <RadzenButton ButtonStyle="ButtonStyle.Info" Text="Back" Click=@Back></RadzenButton>
+                </div>
+                <div>
+                    <RadzenLabel Text=@_errorMessage></RadzenLabel>
+                </div>
+            </RadzenFieldset>
+        </RadzenTemplateForm>
+    </div>
+</div>
+
+@code {
+
+    bool popup = true;
+
+    User model = new User();
+
+    EventHandler console;
+
+    void OnSubmit(User model)
+    {
+        Console.WriteLine($"Submit: {JsonSerializer.Serialize(model, new JsonSerializerOptions() { WriteIndented = true })}");
+    }
+
+    void OnInvalidSubmit(FormInvalidSubmitEventArgs args)
+    {
+        Console.WriteLine($"InvalidSubmit: {JsonSerializer.Serialize(args, new JsonSerializerOptions() { WriteIndented = true })}");
+    }
+
+
+    private string _username = "";
+    private string _password = "";
+    private string _email = "";
+    private string _errorMessage = "";
+
+    private async Task PerformRegister()
+    {
+        _errorMessage = "";
+        try
+        {
+
+            var registerUser = new User
+            {
+                email = _email,
+                username = _username,
+                password = _password
+            };
+
+    //if (string.IsNullOrEmpty(registerUser.username) && string.IsNullOrEmpty(registerUser.password) &&
+    //    string.IsNullOrEmpty(registerUser.email)) throw new Exception("Enter credentials");
+    //
+    //if (string.IsNullOrEmpty(registerUser.username)) throw new Exception("Enter username");
+    //if (registerUser.username.Length is < 5 or > 30)
+    //    throw new Exception("Username has to be between 5 and 30 characters");
+    //
+    //if (string.IsNullOrEmpty(registerUser.email)) throw new Exception("Enter email");
+    //if (!registerUser.email.Contains("@"))
+    //    throw new Exception("Email has to be specified");
+    //
+    //if (string.IsNullOrEmpty(registerUser.password)) throw new Exception("Enter password");
+    //if (registerUser.password.Length is < 5 or > 30)
+    //    throw new Exception("Password has to be between 5 and 30 characters");
+    //
+    //if (!_password.Equals(_repeatPassword))
+    //    throw new Exception("Passwords do not match.");
+
+            string response = await ((CustomAuthenticationStateProvider) _authenticationStateProvider).Register(model);
+
+            if (response.Equals("Register successful"))
+            {
+    //_email = "";
+    //_username = "";
+    //_password = "";
+                _navigationManager.NavigateTo("/");
+            }
+            else _errorMessage = response;
+        }
+        catch (Exception e)
+        {
+            _errorMessage = e.Message;
+            Console.WriteLine(_errorMessage);
+        }
+    }
+
+    private void Back()
+    {
+        _navigationManager.NavigateTo("/");
+    }
+}
