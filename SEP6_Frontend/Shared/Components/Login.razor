@@ -16,7 +16,7 @@
                 Login
             </RadzenText>
             <RadzenTemplateForm Data=@("SimpleLogin")>
-                <RadzenLogin AllowRegister="false" AllowResetPassword="false" Login=@(args => PerformLogin(args))></RadzenLogin>
+                <RadzenLogin AllowRegister="true" AllowResetPassword="false" Register=PerformRegister Login=@(args => PerformLogin(args))></RadzenLogin>
             </RadzenTemplateForm>
         </RadzenCard>
     </RadzenCard>
@@ -49,6 +49,6 @@
 
     private void PerformRegister()
     {
-        //_navigationManager.NavigateTo("/register");
+        _navigationManager.NavigateTo("/register");
     }
 }

@@ -50,7 +50,7 @@ namespace SEP6_Frontend.Data.Implementation
             return finalUser;
         }
 
-        public async Task<bool> Register(User user)
+        public async Task<string> Register(User user)
         {
             _client = new HttpClient();
 
@@ -61,21 +61,14 @@ namespace SEP6_Frontend.Data.Implementation
             );
 
             HttpResponseMessage responseMessage =
-                await _client.PostAsync("http://localhost:8080/auth/register", content);
+                await _client.PostAsync("http://localhost:8080/api/v1/users/register", content);
 
             if (!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
 
             string responseContent = await responseMessage.Content.ReadAsStringAsync();
 
-            bool finalUser = JsonSerializer.Deserialize<bool>(responseContent, new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
-
-            if (!finalUser) throw new Exception("Could not register the user.");
-
-            return finalUser;
+            return responseContent;
         }
 
         public async Task<string> UpdateUser(User updatedUser)

@@ -71,12 +71,12 @@ namespace SEP6_Frontend.Authentication
                 Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity))));
         }
 
-        public async Task Register(User user) {
+        public async Task<string> Register(User user) {
             try {
-                bool response = await _userService.Register(user);
+                return await _userService.Register(user);
             }
             catch (Exception e) {
-                throw new Exception("Wrong credentials");
+                throw new Exception("Wrong credentials ");
             }
         }
 
