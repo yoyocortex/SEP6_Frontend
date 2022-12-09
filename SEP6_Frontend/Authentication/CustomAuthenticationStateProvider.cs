@@ -56,7 +56,7 @@ namespace SEP6_Frontend.Authentication
                 {
                     email = user.email,
                     username = user.username,
-                    password = "karlo1karlo1"
+                    password = ""
                 };
                 string serialisedData = JsonSerializer.Serialize(userToSerialize);
                 await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);

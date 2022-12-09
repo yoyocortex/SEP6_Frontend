@@ -15,7 +15,7 @@ namespace SEP6_Frontend.Data.Implementation {
         {
             _client = new HttpClient();
 
-            var responseMessage = await _client.GetAsync($"http://localhost:8080/api/v1/movies/moviedata?id={movieID}");
+            var responseMessage = await _client.GetAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/moviedata?id={movieID}");
 
             if (!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
@@ -41,7 +41,7 @@ namespace SEP6_Frontend.Data.Implementation {
             try
             {
                 responseMessage =
-                    await _client.PostAsync($"http://localhost:8080/api/v1/movies/search", body);
+                    await _client.PostAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/search", body);
             }
             catch (Exception e)
             {
@@ -69,7 +69,7 @@ namespace SEP6_Frontend.Data.Implementation {
         {
             _client = new HttpClient();
 
-            var responseMessage = await _client.GetAsync($"http://localhost:8080/api/v1/movies/getRandomMovies");
+            var responseMessage = await _client.GetAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/getRandomMovies");
 
             if (!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
@@ -97,7 +97,7 @@ namespace SEP6_Frontend.Data.Implementation {
             try
             {
                 responseMessage =
-                    await _client.PostAsync($"http://localhost:8080/api/v1/movies/favouriteMovie", body);
+                    await _client.PostAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/favouriteMovie", body);
             }
             catch (Exception e)
             {
@@ -132,7 +132,7 @@ namespace SEP6_Frontend.Data.Implementation {
             try
             {
                 responseMessage =
-                    await _client.PostAsync($"http://localhost:8080/api/v1/movies/isFavouriteMovie", body);
+                    await _client.PostAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/isFavouriteMovie", body);
             }
             catch (Exception e)
             {
@@ -160,7 +160,7 @@ namespace SEP6_Frontend.Data.Implementation {
         {
             _client = new HttpClient();
 
-            var responseMessage = await _client.GetAsync($"http://localhost:8080/api/v1/movies/getFavouriteMovies?email={email}");
+            var responseMessage = await _client.GetAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/getFavouriteMovies?email={email}");
 
             if (!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
@@ -181,7 +181,7 @@ namespace SEP6_Frontend.Data.Implementation {
         {
             _client = new HttpClient();
 
-            var responseMessage = await _client.GetAsync($"http://localhost:8080/api/v1/movies/getRatingOverYears");
+            var responseMessage = await _client.GetAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/getRatingOverYears");
 
             if (!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
@@ -202,7 +202,7 @@ namespace SEP6_Frontend.Data.Implementation {
         {
             _client = new HttpClient();
 
-            var responseMessage = await _client.GetAsync($"http://localhost:8080/api/v1/movies/getBestRatedDirectors");
+            var responseMessage = await _client.GetAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/getBestRatedDirectors");
 
             if (!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
@@ -223,7 +223,7 @@ namespace SEP6_Frontend.Data.Implementation {
         {
             _client = new HttpClient();
 
-            var responseMessage = await _client.GetAsync($"http://localhost:8080/api/v1/movies/getBestRatedActors");
+            var responseMessage = await _client.GetAsync($"https://movies-backend.azurewebsites.net/api/v1/movies/getBestRatedActors");
 
             if (!responseMessage.IsSuccessStatusCode)
                 throw new Exception($"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
