@@ -1,0 +1,33 @@
+@namespace SEP6_Frontend.Shared
+@using SEP6_Frontend.Data
+@using SEP6_Frontend.Models
+@using SEP6_Frontend.Authentication
+@inject IMovie _iMovie;
+@inject AuthenticationStateProvider _authentication;
+
+<div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
+    <h3 style="color: #9da0a0;">Favorites Overview</h3>
+
+    <RadzenDataList WrapItems="true" AllowPaging="false" Data="@_favoriteMovies" TItem="MovieShort">
+        <Template Context="movie">
+            <RadzenCard Style="width:300px; border-radius: 15px; background-color: #2b2b2b; border-color: #9da0a0;">
+                <div class="d-flex flex-row align-items-center">
+                    <RadzenImage Path=@movie.poster Style="width: auto; height: 80px;"/>
+                    <div style="padding-left: 3%; color: #9da0a0;">
+                        <h4 class="mb-0">@movie.title</h4>
+                    </div>
+                </div>
+            </RadzenCard>
+        </Template>
+    </RadzenDataList>
+</div>
+
+@code {
+    private List<MovieShort> _favoriteMovies;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _favoriteMovies = new List<MovieShort>();
+        _favoriteMovies = await _iMovie.GetFavoriteMovies(((CustomAuthenticationStateProvider) _authentication).GetEmail());
+    }
+}

@@ -45,11 +45,8 @@ namespace SEP6_Frontend.Authentication
             return await Task.FromResult(new AuthenticationState(cachedClaimsPrincipal));
         }
 
-        public async Task ValidateLogin(string username, string password) {
-            //if (string.IsNullOrEmpty(username) && string.IsNullOrEmpty(password)) throw new Exception("Enter credentials");
-            //if (string.IsNullOrEmpty(username)) throw new Exception("Enter username");
-            //if (string.IsNullOrEmpty(password)) throw new Exception("Enter password");
-
+        public async Task ValidateLogin(string username, string password) 
+        {
             ClaimsIdentity identity = new ClaimsIdentity();
             try {
                 User user = await _userService.ValidateLogin(username, password);
@@ -57,8 +54,9 @@ namespace SEP6_Frontend.Authentication
                 _cachedUser = user;
                 User userToSerialize = new User
                 {
+                    email = user.email,
                     username = user.username,
-                    password = user.password
+                    password = ""
                 };
                 string serialisedData = JsonSerializer.Serialize(userToSerialize);
                 await _jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
@@ -80,6 +78,11 @@ namespace SEP6_Frontend.Authentication
             }
         }
 
+        public string GetEmail()
+        {
+            return _cachedUser.email;
+        }
+        
         public void Logout() {
             _cachedUser = null;
             var user = new ClaimsPrincipal(new ClaimsIdentity());
@@ -92,34 +95,10 @@ namespace SEP6_Frontend.Authentication
             List<Claim> claims = new List<Claim>();
 
             claims.Add(new Claim(ClaimTypes.Name, user.username));
-            //claims.Add(new Claim("userId", user.userId.ToString()));
-            //claims.Add(new Claim("role", user.role.ToString()));
+            claims.Add(new Claim("email", user.email));
 
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;
-        }
-
-        //public int GetUserId() {
-        //    return _cachedUser.userId;
-        //}
-        
-        public string GetDisplayName() {
-            return _cachedUser.username;
-        }
-
-        public async Task<User> GetUser()
-        {
-            return _cachedUser;
-        }
-
-        public async Task<string> UpdateUser(User user)
-        {
-          var response = await _userService.UpdateUser(user);
-          if (response.Equals("Update of the profile successful"))
-          {
-              await ValidateLogin(user.username, user.password);
-          }
-          return response;
         }
     }
 }

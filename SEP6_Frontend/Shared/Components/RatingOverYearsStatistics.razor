@@ -1,0 +1,39 @@
+@namespace SEP6_Frontend.Shared
+@using SEP6_Frontend.Data
+@using SEP6_Frontend.Models
+@inject IMovie _iMovie;
+
+@if (_ratingOverYears.Count != 0)
+{
+    <div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
+        <h3 style="color: #9da0a0;">Rating Over Years Statistic</h3>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 my-5">
+                    <RadzenChart Style="color: #9da0a0;">
+                        <RadzenLineSeries Smooth="@smooth" Data="@_ratingOverYears" CategoryProperty="Year" Title="Rating over Years" ValueProperty="Rating">
+                            <RadzenMarkers MarkerType="MarkerType.Circle"/>
+                        </RadzenLineSeries>
+                        <RadzenCategoryAxis Min="1970" Max="2024"/>
+                    </RadzenChart>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (_ratingOverYears.Count == 0)
+{
+    <img style="width: 10%;" src="Images/spinning-circles.svg"/>
+}
+
+@code {
+    bool smooth = true;
+    private List<DataItem> _ratingOverYears;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _ratingOverYears = new List<DataItem>();
+        _ratingOverYears = await _iMovie.GetRatingOverYears();
+    }
+}

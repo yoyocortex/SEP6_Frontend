@@ -30,6 +30,7 @@ namespace SEP6_Frontend {
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<IUserService, ImplUserService>();
+            services.AddScoped<IMovie, ImplMovieService>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             //services.AddBlazoredModal();
             //services.AddSingleton<WeatherForecastService>();

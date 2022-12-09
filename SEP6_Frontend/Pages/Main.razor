@@ -1,0 +1,142 @@
+@page "/main"
+@using SEP6_Frontend.Shared.Search
+@inject NavigationManager _navigationManager;
+
+<div style="height: 100vh; width: 100vw;">
+    <AuthorizeView>
+        <NotAuthorized>
+            <Index/>
+        </NotAuthorized>
+        <Authorized>
+            <div style="height: 100vh; width: 100vw;">
+                <div>
+                    <RadzenLayout>
+                        <RadzenHeader Style="background-color: #2b2b2b;">
+                            <div class="d-flex align-items-center">
+                                <RadzenSidebarToggle Click="@(() => sidebarExpanded = !sidebarExpanded)"/>
+                                <div style="width: 100vw; justify-content: center; display: flex;">
+                                    <Search OnSearchSelected="SearchSelected"></Search>
+                                </div>
+                                <div>
+                                    <Logout></Logout>
+                                </div>
+                            </div>
+                        </RadzenHeader>
+                        <RadzenSidebar Style="background-color: #2b2b2b;" @bind-Expanded="@sidebarExpanded">
+                            <RadzenPanelMenu Click="((args) => _doNavigation(args))" Style="background-color: #2b2b2b;">
+                                <RadzenPanelMenuItem Text="Home" Icon="home"></RadzenPanelMenuItem>
+                                <RadzenPanelMenuItem Text="Favorite Movies" Icon="grade"/>
+                                <RadzenPanelMenuItem Text="Rating over years" Icon="assessment"/>
+                                <RadzenPanelMenuItem Text="Best rated directors" Icon="assessment"/>
+                                <RadzenPanelMenuItem Text="Best rated actors" Icon="assessment"/>
+                            </RadzenPanelMenu>
+                        </RadzenSidebar>
+                        <RadzenBody Style="background-color: #2b2b2b; display: flex; align-items: center; justify-content: center;">
+                            @if (id > 0)
+                            {
+                                <MovieOverview Id=@id></MovieOverview>
+                            }
+                            @if (id == 0)
+                            {
+                                <RandomMovies OnMovieSelected="MovieSelected"/>
+                            }
+                            @if (favBool)
+                            {
+                                <FavoritesOverview></FavoritesOverview>
+                            }
+                            @if (ratingOverYearsBool)
+                            {
+                                <RatingOverYearsStatistics></RatingOverYearsStatistics>
+                            }
+                            @if (bestRatedDirectorsBool)
+                            {
+                                <BestRatedDirectors></BestRatedDirectors>
+                            }
+                            @if (bestRatedActorsBool)
+                            {
+                                <BestRatedActors></BestRatedActors>
+                            }
+                        </RadzenBody>
+                    </RadzenLayout>
+                </div>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+</div>
+
+@code {
+    private int id = 0;
+    private bool favBool = false;
+    private bool ratingOverYearsBool = false;
+    private bool bestRatedDirectorsBool = false;
+    private bool bestRatedActorsBool = false;
+    bool sidebarExpanded = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        id = 0;
+        favBool = false;
+        ratingOverYearsBool = false;
+        bestRatedDirectorsBool = false;
+        bestRatedActorsBool = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected async Task SearchSelected(int id)
+    {
+        this.id = 0;
+        favBool = false;
+        ratingOverYearsBool = false;
+        bestRatedDirectorsBool = false;
+        bestRatedActorsBool = false;
+        StateHasChanged();
+        this.id = id;
+    }
+
+    private void _doNavigation(MenuItemEventArgs args)
+    {
+        switch (args.Text)
+        {
+            case "Home":
+                OnInitializedAsync();
+                break;
+            case "Favorite Movies":
+                id = -1;
+                ratingOverYearsBool = false;
+                bestRatedDirectorsBool = false;
+                bestRatedActorsBool = false;
+                favBool = true;
+                break;
+            case "Rating over years":
+                id = -1;
+                favBool = false;
+                bestRatedDirectorsBool = false;
+                bestRatedActorsBool = false;
+                ratingOverYearsBool = true;
+                break;
+            case "Best rated directors":
+                id = -1;
+                favBool = false;
+                ratingOverYearsBool = false;
+                bestRatedActorsBool = false;
+                bestRatedDirectorsBool = true;
+                break;
+            case "Best rated actors":
+                id = -1;
+                favBool = false;
+                ratingOverYearsBool = false;
+                bestRatedDirectorsBool = false;
+                bestRatedActorsBool = true;
+                break;
+        }
+    }
+
+    protected async Task MovieSelected(string movieId)
+    {
+        id = 0;
+        favBool = false;
+        ratingOverYearsBool = false;
+        StateHasChanged();
+        id = int.Parse(movieId);
+    }
+}

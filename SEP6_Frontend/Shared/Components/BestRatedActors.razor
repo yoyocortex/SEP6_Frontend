@@ -1,0 +1,38 @@
+@namespace SEP6_Frontend.Shared
+@using SEP6_Frontend.Data
+@using SEP6_Frontend.Models
+@inject IMovie _iMovie;
+
+@if (_bestRatedActors.Count != 0)
+{
+    <div style="display: flex; flex-direction: column; width: 100%; height: 100%;">
+        <h3 style="color: #9da0a0;">Best rated Actor's</h3>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 my-5">
+                    <RadzenChart style="color: #9da0a0;">
+                        <RadzenBarSeries Data="@_bestRatedActors" CategoryProperty="name" Title="Rating" LineType="LineType.Dashed" ValueProperty="rating"></RadzenBarSeries>
+                        <RadzenBarOptions Radius="5"/>
+                        <RadzenValueAxis Min="0" Max="10"></RadzenValueAxis>
+                    </RadzenChart>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (_bestRatedActors.Count == 0)
+{
+    <img style="width: 10%;" src="Images/spinning-circles.svg"/>
+}
+
+@code {
+    bool smooth = true;
+    private List<Person> _bestRatedActors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _bestRatedActors = new List<Person>();
+        _bestRatedActors = await _iMovie.GetBestRatingActors();
+    }
+}
