@@ -21,7 +21,7 @@ namespace SEP6_Frontend.Data.Implementation
 
             User user = new()
             {
-                email = "gosia@gmail.com",
+                email = "",
                 username = username,
                 password = password
             };
@@ -70,25 +70,5 @@ namespace SEP6_Frontend.Data.Implementation
 
             return responseContent;
         }
-
-        public async Task<string> UpdateUser(User updatedUser)
-        {
-           _client = new HttpClient();
-            var content = new StringContent(
-                JsonSerializer.Serialize(updatedUser), Encoding.UTF8, "application/json");
-            var responseBack = "";
-            try
-            {
-                var response = await _client.PostAsync("http://localhost:8080/auth/updateuser", content);
-                var responseContent = await response.Content.ReadAsStringAsync();
-                responseBack = responseContent;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            return responseBack;
-        }
-        
     }
 }

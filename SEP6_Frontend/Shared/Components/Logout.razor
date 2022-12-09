@@ -1,0 +1,15 @@
+﻿@namespace SEP6_Frontend.Shared
+@using SEP6_Frontend.Authentication
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager _navigation
+
+<RadzenButton Style="width: max-content;" Click="PerformLogout">
+    Log out
+</RadzenButton>
+
+@code {
+    private void PerformLogout(){
+        ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
+        _navigation.NavigateTo("");
+    }
+}

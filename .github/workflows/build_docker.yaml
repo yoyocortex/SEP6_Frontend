@@ -1,0 +1,28 @@
+name: Build Docker and send to ACR
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    defaults: 
+      run: 
+        working-directory: ./SEP6_Frontend
+
+    steps:
+
+      - uses: actions/checkout@v3
+
+      - name: Login to ACR, build and push image
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - run: |
+          docker build -t ${{secrets.ACR_LOGIN_SERVER}}/sep6frontend:latest \
+          --label frontendversion=latest .
+          docker push ${{secrets.ACR_LOGIN_SERVER}}/sep6frontend:latest

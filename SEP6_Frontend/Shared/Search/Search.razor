@@ -1,0 +1,62 @@
+﻿@using SEP6_Frontend.Data
+@using SEP6_Frontend.Models
+@namespace SEP6_Frontend.Shared.Search
+@inject NavigationManager _navigationManager;
+@inject IMovie _movieService; 
+
+<RadzenAutoComplete Style="border-radius: 30px; vertical-align: middle; width: 30%;" Placeholder="Search..." Data=@_filteredMovies TextProperty="name" LoadData=@OnLoadData Change=@(args => OnChange(args))/>
+                                                                                                                                   
+@code {
+    [Parameter]
+    public EventCallback<int> OnSearchSelected { get; set; }
+    
+    private List<SearchResponse> _movies = new List<SearchResponse>();// = new IDictionary<int,string>();
+    
+    private List<string> _filteredMovies = new List<string>();// = new IDictionary<int,string>();
+
+    private int id = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        id = 0;
+    }
+    
+    async void OnChange(object value) 
+    {
+        if (_movies.Count == 0)
+            return;
+
+        SearchResponse search = _movies.Find((response => response.title.Equals(value)));
+
+        if (search == null)
+            return;
+        
+        id = search.id;
+
+        if (id != 0)
+        {
+            await OnSearchSelected.InvokeAsync(id);
+        }
+    //_navigationManager.NavigateTo($"/movie/{id}", forceLoad: true);
+    }
+
+    async Task OnLoadData(LoadDataArgs args)
+    {
+        _movies = new List<SearchResponse>();
+        _filteredMovies = new List<string>();
+        
+        if (args.Filter is not (null or ""))
+        {
+            _movies = await _movieService.SearchForMovies(args.Filter);
+        }
+
+        if (_movies.Count == 0) return;
+
+        foreach (var movie in _movies)
+        {
+            _filteredMovies.Add(movie.title);
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+}

@@ -1,0 +1,158 @@
+@using SEP6_Frontend.Models
+@using SEP6_Frontend.Data
+@using SEP6_Frontend.Authentication
+@inject IMovie _iMovie;
+@inject AuthenticationStateProvider _authentication;
+@namespace SEP6_Frontend.Shared
+
+<div class="page" style="height: 100%; width: 100%;">
+    <AuthorizeView>
+        <NotAuthorized>
+            <Index/>
+        </NotAuthorized>
+        <Authorized>
+            <div style="background-color: #2b2b2b; height: 100%; width: 100%; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-between; align-items: center; align-content: center;">
+                <div style="display: flex; width: 50%; flex-direction: column; flex-wrap: nowrap; justify-content: center; align-items: baseline; align-content: center;">
+                    <div style="padding-left: 2%; display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; align-items: baseline;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.H1" Text=@title></RadzenText>
+                        <RadzenImage style="width: 5%; display: flex; flex-direction: row; align-self: center; padding-left: 2%;" Click="((args) => favorite())" Path=@imgPath></RadzenImage>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Year:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@year></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Rated:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@rated></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Release date:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@released></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Runtime:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@runtime></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Genre:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@genre></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Director:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@director></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Writer:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@writer></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Actors:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@actors></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: flex-start; align-items: stretch; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Plot:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@plot></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Language:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@language></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">County:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@country></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Language:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@language></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Awards:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@awards></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">IMDB rating:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@imdbRating></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">IMDB votes:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@imdbVotes></RadzenText>
+                    </div>
+                    <div style="display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: center; align-items: center; align-content: stretch; padding-left: 5%;">
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1">Box office:&nbsp;</RadzenText>
+                        <RadzenText Style="color: #9da0a0" TextStyle="TextStyle.Subtitle1" Text=@boxOffice></RadzenText>
+                    </div>
+                </div>
+                <div style="width: 50%; height: 80vh; display: flex; justify-content: center;">
+                    <RadzenImage Path=@poster></RadzenImage>
+                </div>
+            </div>
+        </Authorized>
+    </AuthorizeView>
+</div>
+
+@code {
+    private string title;
+    private string year;
+    private string rated;
+    private string released;
+    private string runtime;
+    private string genre;
+    private string director;
+    private string writer;
+    private string actors;
+    private string plot;
+    private string language;
+    private string country;
+    private string awards;
+    private string poster;
+    private string imdbRating;
+    private string imdbVotes;
+    private string imdbID;
+    private string boxOffice;
+
+    private string imgPath;
+    private bool star = false;
+
+    private Movie _movie;
+
+    [Parameter]
+    public int Id { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _movie = await _iMovie.MovieInformation(""+Id);
+        star = await _iMovie.IsThisMovieFav(""+Id, ((CustomAuthenticationStateProvider) _authentication).GetEmail());
+        setFavoritePicture();
+        title = _movie.Title;
+        year = _movie.Year;
+        rated = _movie.Rated;
+        released = _movie.Released;
+        runtime = _movie.Runtime;
+        genre = _movie.Genre;
+        director = _movie.Director;
+        writer = _movie.Writer;
+        actors = _movie.Actors;
+        plot = _movie.Plot;
+        language = _movie.Language;
+        country = _movie.Country;
+        awards = _movie.Awards;
+        imdbRating = _movie.imdbRating;
+        imdbVotes = _movie.imdbVotes;
+        boxOffice = _movie.BoxOffice;
+        poster = _movie.Poster;
+    }
+    
+    private async Task favorite()
+    {
+        star = await _iMovie.SetFavoriteMovie(_movie.imdbID, ((CustomAuthenticationStateProvider) _authentication).GetEmail());
+        setFavoritePicture();
+    }
+
+    private void setFavoritePicture()
+    {
+        if(star)
+            imgPath = "Images/star full.png";
+        else
+            imgPath = "Images/star empty.png";
+    }
+}
